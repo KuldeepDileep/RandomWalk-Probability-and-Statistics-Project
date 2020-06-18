@@ -1,3 +1,5 @@
+#TASK2:
+
 import random 
 import numpy as np 
 import matplotlib.pyplot as plt
@@ -5,6 +7,7 @@ import time
 import math
 from random import choices
 from random import choices
+import statistics
 
 p1 = float(input("Enter the right probability of person 1: "))
 p2 = float(input("Enter the right probability of person 2: "))
@@ -17,37 +20,38 @@ path1 = [s1]
 path2 = [s2]
 check = False
 pos1 = 0
-pos2 = 0
-#start_time = time.time()   
+pos2 = 0  
 time = 0    #Assumption = This time is equivalent to real time so if time = 5 then it is equal to 5 seconds.
-
-while (check == False):
-    choice1 = choices([1,-1], prob1)  #Selects 1 & -1 with the corresponding probabilties specified in prob1 list. 
-    choice2 = choices([1,-1], prob2)  #Selects 1 & -1 with the corresponding probabilties specified in prob2 list.
-    #print("Choice: ", choice)
-    pos1 = path1[-1] + choice1[0]
-    pos2 = path2[-1] + choice2[0]
-    path1.append(pos1)
-    path2.append(pos2)
-    time+=1
-    if path1[-1] == path2[-1]:
-        check = True
-    #if (time.time()-start_time) > 300:
-        #raise Exception("Sorry, 5 minutes have passed and they don't meet.")
-        #break
-    #end_time = time.time()
-    if time == 300:
-        break
-#time = math.ceil(end_time - start_time)
-#print(time)
-time = list(range(0, time+1))
-print("Time taken = ", time)
+time_histo = []
+for i in range(1000):
+    while (check == False):
+        choice1 = choices([1,-1], prob1)  #Selects 1 & -1 with the corresponding probabilties specified in prob1 list. 
+        choice2 = choices([1,-1], prob2)  #Selects 1 & -1 with the corresponding probabilties specified in prob2 list.
+        pos1 = path1[-1] + choice1[0]
+        pos2 = path2[-1] + choice2[0]
+        path1.append(pos1)
+        path2.append(pos2)
+        time+=1
+        if path1[-1] == path2[-1]:
+            check = True
+        if time == 100: #Will wait for 100seconds if path don't meet it will end
+            break
+    time_histo.append(time)
+    path1 = [s1]
+    path2 = [s2]
+    pos1 = 0
+    pos2 = 0
+    check = False
+    time = 0    #Assumption = This time is equivalent to real time so if time = 5 then it is equal to 5 seconds.
+time_histo.sort()
+print("Time histo: ", time_histo)
+n, bins, patches = plt.hist(x=time_histo, bins=time_histo, color='#0504aa', alpha=0.7, histtype='bar', ec='black')
 print("Starting position of p1 = ", s1)
 print("Starting position of p2 = ", s2)
-print("Path1 = ", path1)
-print("Path2= ", path2)
-print("Time to meet in seconds = ", time[-1])
-plt.plot(time, path1, 'r--', time, path2, 'r')
-plt.xlabel("Time(s)")
-plt.ylabel("Distance from starting position")
+plt.xlabel('time')
+plt.ylabel('Frequency')
+plt.title('Task 2')
+maxfreq = statistics.mode(time_histo)
+print("Expected time taken: ", maxfreq)
+print("Number of occurence: ", time_histo.count(maxfreq))
 plt.show()
