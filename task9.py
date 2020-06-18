@@ -108,6 +108,7 @@ node1.plot()
 node2.plot()
 node3.plot()
 plt.legend(["Circle", "corona", "node1", "node2", "node3"],)
+plt.title("Social Distancing")
 plt.show()
 
 
@@ -133,4 +134,5 @@ node1.plot()
 node2.plot()
 node3.plot()
 plt.legend(["Circle", "corona", "node1", "node2", "node3"])
+plt.title("Social Distancing")
 plt.show()
