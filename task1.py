@@ -1,7 +1,9 @@
+#Task1:
 import random 
 import numpy as np 
 import matplotlib.pyplot as plt
 from random import choices
+import statistics
 
 def path_finder(steps, prob, path):
     pos = 0
@@ -17,10 +19,20 @@ start_pos = int(input("Enter the starting position: "))
 prob = [p, round(float(1.0-p), 1)] #p = prob to move right and 1-p = prob to move left
 print(prob)
 path = [start_pos]
-path2 = path_finder(steps, prob, path)
+path_histo = []
+for i in range(1000):
+    path2 = path_finder(steps, prob, path)
+    path_histo.append(abs(path[-1]-start_pos))
+    path = [start_pos]
 print("Starting position = ", start_pos)
-print("Distance from starting position = ", abs(path[-1]-start_pos))
-plt.plot(path)
-plt.xlabel("Steps")
-plt.ylabel("Distance from starting position")
+path_histo.sort()
+print("path: ", path_histo)
+n, bins, patches = plt.hist(x=path_histo, bins=path_histo, color='#0504aa', alpha=0.7, histtype='bar', ec='black')
+print("n: ", n)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Task 1')
+maxfreq = statistics.mode(path_histo)
+print("Expected distance from starting point: ", maxfreq)
+print("Number of occurence: ", path_histo.count(maxfreq))
 plt.show()
