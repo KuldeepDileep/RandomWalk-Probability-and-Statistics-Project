@@ -4,14 +4,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import uniform
-
-
-def draw_circle():
-    x1 = 100*np.cos(np.linspace(0, 2*np.pi))
-    y1 = 100*np.sin(np.linspace(0, 2*np.pi))
-    fig, ax = plt.subplots(1)
-    ax.plot(x1, y1)
-    plt.Circle((0, 0), 1)
+from statistics import mean
 
 
 class Node:
@@ -19,15 +12,25 @@ class Node:
         self.pathx, self.pathy = [x_initial], [y_inital]
 
     def random_theta(self):
-        return uniform.rvs(size=1, loc=0, scale=360)[0]
+        '''
+        returns random orientation
+        '''
 
-    def random_radius(self):
+        return (uniform.rvs(size=1, loc=0, scale=360)[0]*math.pi)/180
+
+    def random_step(self):
+        '''
+        returns random step size
+        '''
         return uniform.rvs(size=1, loc=0, scale=1)[0]
 
     def change_path(self):
+        '''
+        Move the node along a random path
+        '''
         h = self.pathx[-1]
         k = self.pathy[-1]
-        theta, r2 = self.random_theta(), self.random_radius()
+        theta, r2 = self.random_theta(), self.random_step()
         x2 = r2*math.cos(theta)+h
         y2 = r2*math.sin(theta)+k
         check = False
@@ -56,15 +59,16 @@ class Node:
     def get_pathy(self):
         return self.pathy
 
-    def plot(self, color="r"):
-        plt.plot(self.pathx, self.pathy, color)
-
 
 class Steps:
     def __init__(self):
         self.steps = 0
 
     def check_distance(self, node: Node, node1: Node):
+        '''
+        checks is the distance is less than one or not
+        '''
+
         pos_x, pos_y = node.get_pathx()[-1], node.get_pathy()[-1]
         pos_x1, pos_y1 = node1.get_pathx()[-1], node1.get_pathy()[-1]
 
@@ -72,6 +76,10 @@ class Steps:
         return distance <= 1
 
     def calculate_steps(self, node: Node, node1: Node):
+        '''
+        calculate no. of steps until the distance reduces to less or equal to 1 or when the step
+        exceed 10,000
+        '''
 
         while True:
 
@@ -87,27 +95,33 @@ class Steps:
 
 
 def average_steps(simulations_no):
-    """return a list of average number of steps after every particular number of simulations"""
-    nice = simulations_no
-    print(nice)
-    avg = 0
+    """return a list of number of steps after every simulation"""
+
+    final = []
+    running = simulations_no
     while simulations_no:
+        print("running simulation number:", running-simulations_no+1)
         step1 = Steps()
         node = Node(0, 0)
         node1 = Node(2, 2)
         #print("Calculating steps", step1.calculate_steps(node, node1))
-        avg += step1.calculate_steps(node, node1)
+        final.append(step1.calculate_steps(node, node1))
         simulations_no -= 1
-    return avg/nice
+    return final
 
 
-# calculating average
-final = []
-for i in range(5, 21, 5):
-    final.append(average_steps(i))
+# making the histogram
 
+no_simulations = int(input("Number of simulation?"))
 
-plt.plot([i for i in range(5, 21, 5)], final)
-plt.xlabel("number of simulations")
-plt.ylabel("average steps taken")
+data = average_steps(no_simulations)
+
+plt.hist(data, color='r', edgecolor='k', alpha=0.65)
+plt.axvline(mean(data), color='k', linestyle='dashed', linewidth=1)
+
+min_ylim, max_ylim = plt.ylim()
+plt.text(mean(data)*1.1, max_ylim*0.9, 'Average: {:.2f}'.format(mean(data)))
+
+plt.xlabel("steps taken")
+plt.ylabel("frequency")
 plt.show()
