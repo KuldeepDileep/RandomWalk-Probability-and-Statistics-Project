@@ -1,5 +1,4 @@
 #TASK2:
-
 import random 
 import numpy as np 
 import matplotlib.pyplot as plt
@@ -8,6 +7,12 @@ import math
 from random import choices
 from random import choices
 import statistics
+
+def freqn(n,bins,patches):
+    nmax = max(n)
+    for i in range(len(n)):
+        if (n[i] == nmax):
+            return patches.pop(i)
 
 p1 = float(input("Enter the right probability of person 1: "))
 p2 = float(input("Enter the right probability of person 2: "))
@@ -51,7 +56,6 @@ print("Starting position of p2 = ", s2)
 plt.xlabel('time')
 plt.ylabel('Frequency')
 plt.title('Task 2')
-maxfreq = statistics.mode(time_histo)
+maxfreq = freqn(n,bins,patches)
 print("Expected time taken: ", maxfreq)
-print("Number of occurence: ", time_histo.count(maxfreq))
 plt.show()
