@@ -22,7 +22,6 @@ for i in range(steps):
     k = pathy[-1]
     x2 = r2*math.cos(theta)+h
     y2 = r2*math.sin(theta)+k
-    print(i)
     while (check == False):
         if (x2**2 + y2**2) > r**2:
             theta = math.atan(y2/x2)
@@ -36,7 +35,6 @@ for i in range(steps):
             else:
                 x2 = x3 + (x3 - x2)
                 y2 = y3
-            #print(x2, "|", y2)
         else:
             pathx.append(x2)
             pathy.append(y2)
