@@ -13,6 +13,12 @@ def path_finder(steps, prob, path):
         path.append(pos)
     return path
 
+def freqn(n,bins,patches):
+    nmax = max(n)
+    for i in range(len(n)):
+        if (n[i] == nmax):
+            return patches.pop(i)
+
 p = float(input("Enter the probability to move right (p): "))
 steps = int(input("Enter the number of steps taken: "))
 start_pos = int(input("Enter the starting position: "))
@@ -32,7 +38,6 @@ print("n: ", n)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Task 1')
-maxfreq = statistics.mode(path_histo)
+maxfreq = freqn(n,bins,patches)
 print("Expected distance from starting point: ", maxfreq)
-print("Number of occurence: ", path_histo.count(maxfreq))
 plt.show()
